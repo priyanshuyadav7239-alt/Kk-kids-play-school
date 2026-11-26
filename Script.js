@@ -1,4 +1,4 @@
-
+alert("JavaScript चालू है");
 document.addEventListener("DOMContentLoaded", function () {
 
   // स्कूल का WhatsApp नंबर
