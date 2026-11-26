@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // स्कूल का WhatsApp नंबर
   // यहाँ 91 के साथ 10 अंकों का सही नंबर डालना है
-  const SCHOOL_WHATSAPP = "91XXXXXXXXXX";
+  const SCHOOL_WHATSAPP = "917239010298";
 
   // साल
   document.getElementById("year").textContent =
