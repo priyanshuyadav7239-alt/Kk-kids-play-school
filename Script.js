@@ -1,16 +1,17 @@
 
-// KK KIDS PLAY SCHOOL
-
 document.addEventListener("DOMContentLoaded", function () {
 
-  // Mobile Menu
-  const menuBtn = document.querySelector(
-    "#menuToggle, .menu-toggle, .hamburger"
-  );
+  // स्कूल का WhatsApp नंबर
+  // यहाँ 91 के साथ 10 अंकों का सही नंबर डालना है
+  const SCHOOL_WHATSAPP = "91XXXXXXXXXX";
 
-  const nav = document.querySelector(
-    "#navLinks, .nav-links, nav ul"
-  );
+  // साल
+  document.getElementById("year").textContent =
+    new Date().getFullYear();
+
+  // Mobile Menu
+  const menuBtn = document.getElementById("menuToggle");
+  const nav = document.getElementById("nav");
 
   if (menuBtn && nav) {
     menuBtn.addEventListener("click", function () {
@@ -19,12 +20,9 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Smooth Scrolling
-  document.querySelectorAll('a[href^="#"]').forEach(function (link) {
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
     link.addEventListener("click", function (e) {
-      const target = document.querySelector(
-        link.getAttribute("href")
-      );
-
+      const target = document.querySelector(this.getAttribute("href"));
       if (target) {
         e.preventDefault();
         target.scrollIntoView({ behavior: "smooth" });
@@ -33,56 +31,67 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // WhatsApp Number
-  const SCHOOL_WHATSAPP = "91XXXXXXXXXX";
+  // WhatsApp Floating Button
+  const whatsappFloat = document.getElementById("whatsappFloat");
 
-  // WhatsApp Buttons
-  document.querySelectorAll(
-    ".whatsapp-btn, #whatsappBtn, [data-whatsapp]"
-  ).forEach(function (button) {
-    button.addEventListener("click", function (e) {
-      e.preventDefault();
-      window.open(
-        "https://wa.me/" + SCHOOL_WHATSAPP,
-        "_blank"
-      );
-    });
-  });
+  if (whatsappFloat) {
+    whatsappFloat.href =
+      "https://wa.me/" + SCHOOL_WHATSAPP;
+  }
 
   // Admission Form
-  const form = document.querySelector(
-    "#admissionForm, .admission-form"
-  );
+  const form = document.getElementById("admissionForm");
 
   if (form) {
     form.addEventListener("submit", function (e) {
       e.preventDefault();
 
       const data = new FormData(form);
-      let message = "KK KIDS PLAY SCHOOL - Admission Enquiry\n\n";
 
-      data.forEach(function (value, key) {
-        message += key + ": " + value + "\n";
-      });
+      const message =
+        "KK KIDS PLAY SCHOOL - Admission Enquiry\n\n" +
+        "Parent Name: " + data.get("parent") + "\n" +
+        "Mobile: " + data.get("phone") + "\n" +
+        "Child Name: " + data.get("child") + "\n" +
+        "Class: " + data.get("class");
 
-      const url =
-        "https://wa.me/" +
+      const url = "https://wa.me/" +
         SCHOOL_WHATSAPP +
-        "?text=" +
-        encodeURIComponent(message);
+        "?text=" + encodeURIComponent(message);
 
       window.open(url, "_blank");
+
+      document.getElementById("formMessage").textContent =
+        "WhatsApp खुल रहा है। कृपया संदेश भेजें।";
     });
   }
 
-  // Gallery Image Click
-  document.querySelectorAll(".gallery img").forEach(function (img) {
-    img.style.cursor = "pointer";
+  // Gallery Lightbox
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImage = document.getElementById("lightboxImage");
+  const closeButton = document.getElementById("closeLightbox");
 
+  document.querySelectorAll(".gallery-grid img").forEach(img => {
     img.addEventListener("click", function () {
-      window.open(img.src, "_blank");
+      lightboxImage.src = img.src;
+      lightbox.classList.add("active");
     });
   });
 
+  if (closeButton) {
+    closeButton.addEventListener("click", function () {
+      lightbox.classList.remove("active");
+    });
+  }
+
+  if (lightbox) {
+    lightbox.addEventListener("click", function (e) {
+      if (e.target === lightbox) {
+        lightbox.classList.remove("active");
+      }
+    });
+  }
+
 });
+    
       
