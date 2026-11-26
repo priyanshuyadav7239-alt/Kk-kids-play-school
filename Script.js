@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
         SCHOOL_WHATSAPP +
         "?text=" + encodeURIComponent(message);
 
-      window.open(url, "_blank");
+      window.location.href = url;
 
       document.getElementById("formMessage").textContent =
         "WhatsApp खुल रहा है। कृपया संदेश भेजें।";
