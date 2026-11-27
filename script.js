@@ -126,19 +126,19 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".gallery-grid img").forEach(function (img) {
       img.addEventListener("click", function () {
         lightboxImage.src = img.src;
-        lightbox.classList.add("open");
+        lightbox.classList.add("active");
       });
     });
 
     if (closeButton) {
       closeButton.addEventListener("click", function () {
-        lightbox.classList.remove("open");
+        lightbox.classList.remove("active");
       });
     }
 
     lightbox.addEventListener("click", function (event) {
       if (event.target === lightbox) {
-        lightbox.classList.remove("open");
+        lightbox.classList.remove("active");
       }
     });
   }
