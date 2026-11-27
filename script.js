@@ -1,37 +1,79 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
-  // स्कूल का WhatsApp नंबर
-  // यहाँ 91 के साथ 10 अंकों का सही नंबर डालना है
+  // SCHOOL WHATSAPP NUMBER
   const SCHOOL_WHATSAPP = "917239010298";
 
-  // साल
-  document.getElementById("year").textContent =
-    new Date().getFullYear();
+  // CURRENT YEAR
+  const year = document.getElementById("year");
+  if (year) {
+    year.textContent = new Date().getFullYear();
+  }
 
-  // Mobile Menu
-  const menuBtn = document.getElementById("menuToggle");
+  // MOBILE MENU
+  const menuToggle = document.getElementById("menuToggle");
   const nav = document.getElementById("nav");
 
-  if (menuBtn && nav) {
-    menuBtn.addEventListener("click", function () {
-      nav.classList.toggle("active");
+  if (menuToggle && nav) {
+
+    menuToggle.addEventListener("click", function (event) {
+      event.stopPropagation();
+
+      nav.classList.toggle("open");
+
+      const isOpen = nav.classList.contains("open");
+
+      menuToggle.setAttribute("aria-expanded", isOpen);
+      menuToggle.setAttribute(
+        "aria-label",
+        isOpen ? "मेन्यू बंद करें" : "मेन्यू खोलें"
+      );
+    });
+
+    // CLOSE MENU ON LINK CLICK
+    nav.querySelectorAll("a").forEach(function (link) {
+      link.addEventListener("click", function () {
+        nav.classList.remove("open");
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "मेन्यू खोलें");
+      });
+    });
+
+    // CLOSE MENU ON OUTSIDE CLICK
+    document.addEventListener("click", function (event) {
+      if (
+        !nav.contains(event.target) &&
+        !menuToggle.contains(event.target)
+      ) {
+        nav.classList.remove("open");
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "मेन्यू खोलें");
+      }
+    });
+
+    // ESCAPE KEY
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        nav.classList.remove("open");
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "मेन्यू खोलें");
+      }
     });
   }
 
-  // Smooth Scrolling
-  document.querySelectorAll('a[href^="#"]').forEach(link => {
-    link.addEventListener("click", function (e) {
-      const target = document.querySelector(this.getAttribute("href"));
+  // SMOOTH SCROLLING
+  document.querySelectorAll('a[href^="#"]').forEach(function (link) {
+    link.addEventListener("click", function (event) {
+      const target = document.querySelector(link.getAttribute("href"));
+
       if (target) {
-        e.preventDefault();
+        event.preventDefault();
         target.scrollIntoView({ behavior: "smooth" });
-        if (nav) nav.classList.remove("active");
       }
     });
   });
 
-  // WhatsApp Floating Button
+  // WHATSAPP FLOATING BUTTON
   const whatsappFloat = document.getElementById("whatsappFloat");
 
   if (whatsappFloat) {
@@ -39,12 +81,18 @@ document.addEventListener("DOMContentLoaded", function () {
       "https://wa.me/" + SCHOOL_WHATSAPP;
   }
 
-  // Admission Form
+  // ADMISSION FORM
   const form = document.getElementById("admissionForm");
+  const formMessage = document.getElementById("formMessage");
 
   if (form) {
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
 
       const data = new FormData(form);
 
@@ -55,43 +103,47 @@ document.addEventListener("DOMContentLoaded", function () {
         "Child Name: " + data.get("child") + "\n" +
         "Class: " + data.get("class");
 
-      const url = "https://wa.me/" +
-        SCHOOL_WHATSAPP +
+      const url =
+        "https://wa.me/" + SCHOOL_WHATSAPP +
         "?text=" + encodeURIComponent(message);
 
-      window.location.href = url;
+      if (formMessage) {
+        formMessage.textContent =
+          "WhatsApp खुल रहा है। कृपया संदेश भेजें।";
+      }
 
-      document.getElementById("formMessage").textContent =
-        "WhatsApp खुल रहा है। कृपया संदेश भेजें।";
+      window.open(url, "_blank");
     });
   }
 
-  // Gallery Lightbox
+  // GALLERY LIGHTBOX
   const lightbox = document.getElementById("lightbox");
   const lightboxImage = document.getElementById("lightboxImage");
   const closeButton = document.getElementById("closeLightbox");
 
-  document.querySelectorAll(".gallery-grid img").forEach(img => {
-    img.addEventListener("click", function () {
-      lightboxImage.src = img.src;
-      lightbox.classList.add("active");
-    });
-  });
+  if (lightbox && lightboxImage) {
 
-  if (closeButton) {
-    closeButton.addEventListener("click", function () {
-      lightbox.classList.remove("active");
+    document.querySelectorAll(".gallery-grid img").forEach(function (img) {
+      img.addEventListener("click", function () {
+        lightboxImage.src = img.src;
+        lightbox.classList.add("open");
+      });
     });
-  }
 
-  if (lightbox) {
-    lightbox.addEventListener("click", function (e) {
-      if (e.target === lightbox) {
-        lightbox.classList.remove("active");
+    if (closeButton) {
+      closeButton.addEventListener("click", function () {
+        lightbox.classList.remove("open");
+      });
+    }
+
+    lightbox.addEventListener("click", function (event) {
+      if (event.target === lightbox) {
+        lightbox.classList.remove("open");
       }
     });
   }
 
 });
+  
     
       
